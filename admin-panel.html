@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADMIN_CONTROL_UNIT</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { background: #050505; color: #e0e0e0; font-family: 'JetBrains Mono', monospace; padding: 20px; }
+        
+        .admin-container { max-width: 1200px; margin: 0 auto; }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ff4141; /* Червоний колір для адмінки */
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .admin-badge {
+            background: #ff4141;
+            color: #000;
+            padding: 5px 15px;
+            font-weight: bold;
+            font-size: 0.8em;
+        }
+
+        .requests-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #111;
+            border: 1px solid #333;
+        }
+
+        .requests-table th {
+            text-align: left;
+            padding: 15px;
+            background: #1a1a1a;
+            color: #888;
+            font-size: 0.8em;
+            border-bottom: 1px solid #333;
+        }
+
+        .requests-table td {
+            padding: 15px;
+            border-bottom: 1px solid #222;
+            vertical-align: top;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            font-size: 10px;
+            font-weight: bold;
+            border: 1px solid;
+        }
+
+        .status-pending { color: #ffb100; border-color: #ffb100; }
+        .status-process { color: #00e5ff; border-color: #00e5ff; }
+        .status-done { color: #00ff41; border-color: #00ff41; }
+
+        .action-select {
+            background: #000;
+            color: #fff;
+            border: 1px solid #444;
+            padding: 5px;
+            font-family: inherit;
+            font-size: 0.8em;
+            outline: none;
+        }
+
+        .object-details {
+            font-size: 0.85em;
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        .object-details b { color: #00ff41; }
+
+        .btn-update {
+            background: #333;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .btn-update:hover { background: #444; }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <div>
+                <h1 style="color: #ff4141; margin: 0;">ADMIN_INCOMING_QUEUE</h1>
+                <p class="status">Режим: Опрацювання вхідних запитів</p>
+            </div>
+            <div class="admin-badge">ROOT_ACCESS_GRANTED</div>
+        </header>
+
+        <table class="requests-table">
+            <thead>
+                <tr>
+                    <th>ID_ЗАПИТУ / ЧАС</th>
+                    <th>РЕСУРС</th>
+                    <th>ОБ'ЄКТИ_ПЕРЕВІРКИ</th>
+                    <th>ПІДСТАВА</th>
+                    <th>СТАТУС / ДІЯ</th>
+                </tr>
+            </thead>
+            <tbody id="adminGrid">
+                </tbody>
+        </table>
+    </div>
+
+    <script>
+        // СИМУЛЯЦІЯ ПЕРЕВІРКИ ПРАВ
+        function checkAdminAccess() {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            // Якщо не адмін — повертаємо на дашборд
+            if (!user || user.role !== 'admin') {
+                alert("ACCESS_DENIED: У вас немає прав адміністратора.");
+                window.location.href = 'dashboard.html';
+            }
+        }
+
+        function loadAdminRequests() {
+            const requests = JSON.parse(localStorage.getItem('requests')) || [];
+            const grid = document.getElementById('adminGrid');
+            grid.innerHTML = '';
+
+            if (requests.length === 0) {
+                grid.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 50px; color: #444;">ЧЕРГА_ПОРОЖНЯ</td></tr>';
+                return;
+            }
+
+            requests.reverse().forEach(req => {
+                const tr = document.createElement('tr');
+                
+                // Формуємо список об'єктів
+                let objectsHtml = req.persons.map((p, index) => {
+                    let details = Object.entries(p)
+                        .map(([key, val]) => `• ${key.split('_').pop().toUpperCase()}: <b>${val}</b>`)
+                        .join('<br>');
+                    return `<div style="margin-bottom: 10px;">[ОБ'ЄКТ #${index + 1}]<br>${details}</div>`;
+                }).join('');
+
+                tr.innerHTML = `
+                    <td>
+                        <div style="font-size: 11px;">#${req.id.toString().slice(-6)}</div>
+                        <div style="color: #666; font-size: 10px;">${req.createdAt}</div>
+                    </td>
+                    <td><b style="color: #00ff41;">${req.resourceName}</b></td>
+                    <td class="object-details">${objectsHtml}</td>
+                    <td style="font-size: 0.8em;">
+                        Код: ${req.groundCode}<br>
+                        Від: ${req.groundDate}
+                    </td>
+                    <td>
+                        <select class="action-select" onchange="updateStatus(${req.id}, this.value)">
+                            <option value="На розгляді" ${req.status === 'На розгляді' ? 'selected' : ''}>На розгляді</option>
+                            <option value="В роботі" ${req.status === 'В роботі' ? 'selected' : ''}>В роботі</option>
+                            <option value="Виконано" ${req.status === 'Виконано' ? 'selected' : ''}>Виконано</option>
+                            <option value="Відхилено" ${req.status === 'Відхилено' ? 'selected' : ''}>Відхилено</option>
+                        </select>
+                        <div style="margin-top: 10px;">
+                            <span class="status-badge ${getStatusClass(req.status)}">${req.status.toUpperCase()}</span>
+                        </div>
+                    </td>
+                `;
+                grid.appendChild(tr);
+            });
+        }
+
+        function getStatusClass(status) {
+            if (status === 'На розгляді') return 'status-pending';
+            if (status === 'В роботі') return 'status-process';
+            if (status === 'Виконано') return 'status-done';
+            return '';
+        }
+
+        function updateStatus(id, newStatus) {
+            let requests = JSON.parse(localStorage.getItem('requests'));
+            const index = requests.findIndex(r => r.id === id);
+            if (index !== -1) {
+                requests[index].status = newStatus;
+                requests[index].updatedAt = new Date().toLocaleString('uk-UA');
+                localStorage.setItem('requests', JSON.stringify(requests));
+                loadAdminRequests(); // Оновлюємо таблицю
+            }
+        }
+
+        window.onload = () => {
+            checkAdminAccess();
+            loadAdminRequests();
+        };
+    </script>
+</body>
+</html>
