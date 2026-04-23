@@ -3,41 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Реєстрація | Klimenko Project</title>
+    <title>REGISTRATION_TERMINAL</title>
     <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="auth-container">
-        <form id="registerForm" class="auth-form">
-            <h2>Створити акаунт</h2>
+    <main class="auth-container">
+        <header class="auth-header">
+            <h2>Реєстрація_об'єкта</h2>
+            <p class="status">Статус: Заповнення протоколу...</p>
+        </header>
+
+        <form class="auth-form" id="registerForm">
             <div class="input-group">
-                <input type="text" id="username" placeholder="Логін" required>
+                <label for="last_name">Прізвище</label>
+                <input type="text" id="last_name" placeholder="Введіть прізвище..." required>
             </div>
+
             <div class="input-group">
-                <input type="password" id="password" placeholder="Пароль" required>
+                <label for="first_name">Ім'я</label>
+                <input type="text" id="first_name" placeholder="Введіть ім'я..." required>
             </div>
-            <button type="submit" class="btn primary">Зареєструватися</button>
-            <p class="auth-footer">Вже є акаунт? <a href="login.html">Увійти</a></p>
+
+            <div class="input-group">
+                <label for="phone">Номер_телефону</label>
+                <input type="tel" id="phone" placeholder="+380..." required>
+            </div>
+            
+            <div class="input-group">
+                <label for="password">Створити_ключ_доступу</label>
+                <input type="password" id="password" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="btn-primary">Записати_в_базу</button>
         </form>
-    </div>
 
-    <script>
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Зупиняємо перезавантаження сторінки
-            
-            const user = {
-                login: document.getElementById('username').value,
-                pass: document.getElementById('password').value
-            };
-
-            // Зберігаємо в пам'ять браузера (імітація БД)
-            localStorage.setItem('registeredUser', JSON.stringify(user));
-            
-            alert('Реєстрація успішна! Переходимо до входу...');
-            
-            // Автоматичний редірект на сторінку входу
-            window.location.href = 'login.html';
-        });
-    </script>
+        <footer class="auth-footer">
+            <a href="index.html">Повернутися до входу</a>
+        </footer>
+    </main>
 </body>
 </html>
