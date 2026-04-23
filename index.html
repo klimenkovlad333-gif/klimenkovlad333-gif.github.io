@@ -11,10 +11,10 @@
     <main class="auth-container">
         <header class="auth-header">
             <h2>Доступ_до_системи</h2>
-            <p class="status">Статус: Очікування даних...</p>
+            <p class="status" id="status-text">Статус: Очікування даних...</p>
         </header>
 
-        <form class="auth-form">
+        <form class="auth-form" id="loginForm">
             <div class="input-group">
                 <label for="login">Ідентифікатор_користувача</label>
                 <input type="text" id="login" placeholder="Введіть ID..." required>
@@ -32,5 +32,22 @@
             <a href="register.html">Реєстрація</a>
         </footer>
     </main>
+
+    <script>
+        // Логіка обробки входу
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Зупиняємо перезавантаження сторінки
+
+            const status = document.getElementById('status-text');
+            status.innerText = "Статус: Перевірка ключа... Авторизація.";
+            status.style.color = "#00ff41";
+
+            // Імітуємо затримку для "солідності" процесу
+            setTimeout(() => {
+                // Перехід на сторінку дашборду
+                window.location.href = "dashboard.html";
+            }, 1200);
+        });
+    </script>
 </body>
 </html>
