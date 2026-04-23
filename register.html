@@ -10,36 +10,37 @@
 <body>
     <main class="auth-container">
         <header class="auth-header">
-            <h2>Реєстрація_об'єкта</h2>
-            <p class="status">Статус: Заповнення протоколу...</p>
+            <h2>Створити_акаунт</h2>
+            <p class="status">Статус: Реєстрація нового об'єкта...</p>
         </header>
 
-        <form class="auth-form" id="registerForm">
+        <form class="auth-form">
             <div class="input-group">
-                <label for="last_name">Прізвище</label>
-                <input type="text" id="last_name" placeholder="Введіть прізвище..." required>
+                <label>Прізвище</label>
+                <input type="text" placeholder="Введіть прізвище..." required>
             </div>
 
             <div class="input-group">
-                <label for="first_name">Ім'я</label>
-                <input type="text" id="first_name" placeholder="Введіть ім'я..." required>
+                <label>Ім'я</label>
+                <input type="text" placeholder="Введіть ім'я..." required>
             </div>
 
             <div class="input-group">
-                <label for="phone">Номер_телефону</label>
-                <input type="tel" id="phone" placeholder="+380..." required>
+                <label>Номер_телефону</label>
+                <input type="tel" placeholder="+380..." required>
             </div>
             
             <div class="input-group">
-                <label for="password">Створити_ключ_доступу</label>
-                <input type="password" id="password" placeholder="••••••••" required>
+                <label>Пароль</label>
+                <input type="password" placeholder="••••••••" required>
             </div>
 
-            <button type="submit" class="btn-primary">Записати_в_базу</button>
+            <button type="submit" class="btn-primary">Зареєструватися</button>
         </form>
 
         <footer class="auth-footer">
-            <a href="index.html">Повернутися до входу</a>
+            <span>Вже є акаунт?</span>
+            <a href="index.html">Увійти</a>
         </footer>
     </main>
 </body>
