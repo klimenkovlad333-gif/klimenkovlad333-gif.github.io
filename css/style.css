@@ -1,4 +1,14 @@
-/* General reset for consistency */
+/* Основні налаштування - Брутальний мінімалізм */
+:root {
+    --bg-color: #050505; /* Майже чорний */
+    --form-bg: #111111;  /* Трохи світліший для контрасту */
+    --text-color: #e0e0e0;
+    --accent-color: #00ff41; /* Матричний зелений */
+    --error-color: #ff3333;
+    --border-color: #333333;
+    --font-main: 'JetBrains Mono', monospace; /* Шрифт для розробників */
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -6,128 +16,121 @@
 }
 
 body {
-    font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    /* Modern purple/blue gradient */
-    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-    min-height: 100vh;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-main);
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #1f2937;
-}
-
-.main-container {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 3rem 2rem;
-    border-radius: 1.5rem;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    width: 100%;
-    max-width: 420px;
-    text-align: center;
-    transition: transform 0.3s ease;
-}
-
-.hero {
-    margin-bottom: 2.5rem;
-}
-
-.brand-title {
-    font-size: 2.5rem;
-    font-weight: 800;
-    margin-bottom: 0.5rem;
-    letter-spacing: -0.025em;
-}
-
-.subtitle {
-    color: #6b7280;
-    font-size: 1.125rem;
-}
-
-.action-group {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-/* Base button styles */
-.btn {
-    display: block;
-    padding: 0.875rem 1.5rem;
-    border-radius: 0.75rem;
-    font-weight: 600;
-    text-decoration: none;
-    font-size: 1rem;
-    transition: all 0.2s ease-in-out;
-}
-
-/* Primary Button Style */
-.btn-primary {
-    background-color: #4f46e5;
-    color: white;
-    box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.4);
-}
-
-.btn-primary:hover {
-    background-color: #4338ca;
-    transform: translateY(-2px);
-}
-
-/* Secondary/Outline Button Style */
-.btn-outline {
-    background-color: transparent;
-    color: #4f46e5;
-    border: 2px solid #4f46e5;
-}
-
-.btn-outline:hover {
-    background-color: #f5f3ff;
-    transform: translateY(-2px);
-}
-
-/* Responsive adjustments for mobile */
-@media (max-width: 480px) {
-    .main-container {
-        width: 90%;
-        padding: 2rem 1.5rem;
-    }
-    
-    .brand-title {
-        font-size: 2rem;
-    }
-}
-.auth-container {
     height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    overflow: hidden;
+    /* Легкий ефект шуму на тлі */
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4eJFAAAAQlBMVEUAAAANDQ0ODg4PDw8QEBARERESEhITExMUFBQVFRUWFhYXFxcYGBgZGRkaGhoeHh4fHx8gICAhISEiIiIjIyMkJCQlJSV5K9pAAAAAnUlEQVR4XrXVwQ7DIAxDUbNByhD//89Fm7Sp00O59lzWfBwIEMH/G5G5FmUuI3KnIit7XUXyVfFVxF7FXkVp/C7/C7fC7fB8fF6fi+/F/fB+vD9vD/fD+/H+vT+/X//f9v99v7fdf+/XNvZ7FfZvKvvvKvvvKvvvKvvvKvvvKvvvKvvvKvvvKvvvKvf7FfYvKvtvKvvnV/YvKvsvFfsf3u8MNA5zY0AAAAAElFTkSuQmCC');
 }
 
-.auth-form {
-    background: #111;
+/* Контейнер форми - Чіткі межі, тінь */
+.auth-container {
+    background-color: var(--form-bg);
     padding: 40px;
-    border: 1px solid #333;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     width: 100%;
     max-width: 400px;
+    position: relative;
 }
 
+/* Ефект неонової смуги зверху */
+.auth-container::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    height: 2px;
+    background-color: var(--accent-color);
+    box-shadow: 0 0 10px var(--accent-color);
+}
+
+.auth-form h2 {
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+    text-align: center;
+    color: var(--accent-color);
+    text-shadow: 0 0 5px var(--accent-color);
+}
+
+/* Поля вводу - Жодних закруглень, тільки метал */
 .input-group {
     margin-bottom: 20px;
 }
 
 .input-group input {
     width: 100%;
-    padding: 12px;
-    background: #000;
-    border: 1px solid #444;
-    color: white;
-    box-sizing: border-box;
+    padding: 15px;
+    background-color: #000;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    font-family: var(--font-main);
+    font-size: 1rem;
+    transition: all 0.3s ease;
 }
 
+.input-group input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+}
+
+/* placeholder - стилізація */
+.input-group input::placeholder {
+    color: #555;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+}
+
+/* Кнопка - Головний акцент */
+.btn {
+    width: 100%;
+    padding: 15px;
+    font-family: var(--font-main);
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid var(--accent-color);
+}
+
+.btn.primary {
+    background-color: transparent;
+    color: var(--accent-color);
+}
+
+.btn.primary:hover {
+    background-color: var(--accent-color);
+    color: #000;
+    box-shadow: 0 0 20px var(--accent-color);
+}
+
+/* Футер форми - Посилання */
 .auth-footer {
-    margin-top: 20px;
-    font-size: 0.9rem;
-    color: #888;
+    margin-top: 25px;
+    font-size: 0.8rem;
+    color: #777;
     text-align: center;
 }
 
-.auth-footer a { color: var(--accent); text-decoration: none; }
+.auth-footer a {
+    color: var(--text-color);
+    text-decoration: none;
+    border-bottom: 1px solid #555;
+    transition: all 0.3s ease;
+}
+
+.auth-footer a:hover {
+    color: var(--accent-color);
+    border-bottom-color: var(--accent-color);
+}
