@@ -3,23 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skorpion - CRM System</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>AUTH_TERMINAL</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-
-    <div class="main-container">
-        <header class="hero">
-            <h1 class="brand-title">🎯 Skorpion</h1>
-            <p class="subtitle">Управління ресурсами та підписками</p>
+    <main class="auth-container">
+        <header class="auth-header">
+            <h2>System_Access</h2>
+            <p class="status">Status: Waiting for credentials...</p>
         </header>
 
-        <nav class="action-group">
-            <a href="register.html" class="btn btn-primary">📝 Реєстрація</a>
+        <form class="auth-form">
+            <div class="input-group">
+                <label for="login">User_ID</label>
+                <input type="text" id="login" placeholder="Enter ID..." required>
+            </div>
             
-            <a href="login.html" class="btn btn-outline">🔑 Вхід</a>
-        </nav>
-    </div>
+            <div class="input-group">
+                <label for="password">Access_Key</label>
+                <input type="password" id="password" placeholder="••••••••" required>
+            </div>
 
+            <button type="submit" class="btn-primary">Execute_Login</button>
+        </form>
+
+        <footer class="auth-footer">
+            <a href="#">Forgot_Key?</a>
+            <span class="divider">|</span>
+            <a href="#">Request_Access</a>
+        </footer>
+    </main>
 </body>
 </html>
