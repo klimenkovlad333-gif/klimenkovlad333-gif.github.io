@@ -10,38 +10,46 @@
 <body>
     <main class="auth-container">
         <header class="auth-header">
-            <h2>Створити_акаунт</h2>
-            <p class="status">Статус: Реєстрація нового об'єкта...</p>
+            <h2>Реєстрація_об'єкта</h2>
+            <p class="status" id="status-text">Статус: Очікування даних...</p>
         </header>
 
-        <form class="auth-form">
+        <form class="auth-form" id="regForm">
             <div class="input-group">
                 <label>Прізвище</label>
-                <input type="text" placeholder="Введіть прізвище..." required>
+                <input type="text" id="lastName" placeholder="Введіть прізвище..." required>
             </div>
-
             <div class="input-group">
                 <label>Ім'я</label>
-                <input type="text" placeholder="Введіть ім'я..." required>
+                <input type="text" id="firstName" placeholder="Введіть ім'я..." required>
             </div>
-
             <div class="input-group">
                 <label>Номер_телефону</label>
-                <input type="tel" placeholder="+380..." required>
+                <input type="tel" id="phone" placeholder="+380..." required>
             </div>
-            
             <div class="input-group">
                 <label>Пароль</label>
-                <input type="password" placeholder="••••••••" required>
+                <input type="password" id="password" placeholder="••••••••" required>
             </div>
 
-            <button type="submit" class="btn-primary">Зареєструватися</button>
+            <button type="submit" class="btn-primary">Записати_в_базу</button>
         </form>
-
-        <footer class="auth-footer">
-            <span>Вже є акаунт?</span>
-            <a href="index.html">Увійти</a>
-        </footer>
     </main>
+
+    <script>
+        document.getElementById('regForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Зупиняємо стандартну відправку
+
+            const status = document.getElementById('status-text');
+            status.innerText = "Статус: Запис даних... Зачекайте.";
+            status.style.color = "#00ff41";
+
+            // Імітація запису в базу (тимчасово, поки не підключимо Firebase)
+            setTimeout(() => {
+                // Перенаправлення на головну сторінку
+                window.location.href = "dashboard.html"; 
+            }, 1500);
+        });
+    </script>
 </body>
 </html>
