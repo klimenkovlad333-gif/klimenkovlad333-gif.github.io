@@ -8,7 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         .request-container {
-            max-width: 800px;
+            /* РОЗТЯГУЄМО КОНТЕЙНЕР */
+            max-width: 1000px; 
             margin: 40px auto;
             background: #111;
             border: 1px solid #333;
@@ -22,8 +23,10 @@
             padding-bottom: 5px;
             font-size: 0.9em;
             text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
+        /* Стилізація блоку з обраними модулями */
         .selected-resources-box {
             background: rgba(0, 255, 65, 0.05);
             border: 1px dashed #00ff41;
@@ -42,29 +45,41 @@
         }
 
         .person-block {
-            border: 1px solid #222;
-            padding: 20px;
-            margin-bottom: 20px;
+            border: 1px solid #333;
+            padding: 25px;
+            margin-bottom: 25px;
             background: #0a0a0a;
+            position: relative;
         }
 
         .person-header {
             display: flex;
             justify-content: space-between;
-            color: #888;
-            margin-bottom: 15px;
-            font-size: 0.8em;
+            color: #00ff41;
+            margin-bottom: 20px;
+            font-size: 1em;
+            font-weight: bold;
+            border-bottom: 1px solid #222;
+            padding-bottom: 10px;
+        }
+
+        /* СІТКА ДЛЯ ПОЛІВ ВСЕРЕДИНІ ОБ'ЄКТА */
+        .fields-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Дві колонки */
+            gap: 20px;
         }
 
         .btn-add {
-            background: none;
-            border: 1px solid #00ff41;
+            background: #1a1a1a;
+            border: 1px dashed #00ff41;
             color: #00ff41;
-            padding: 10px;
+            padding: 15px;
             width: 100%;
             cursor: pointer;
-            margin-bottom: 20px;
-            font-family: inherit;
+            margin-bottom: 30px;
+            font-family: 'JetBrains Mono', monospace;
+            transition: 0.3s;
         }
 
         .btn-add:hover { background: rgba(0, 255, 65, 0.1); }
@@ -72,18 +87,29 @@
         .btn-remove {
             color: #ff4141;
             background: none;
-            border: none;
+            border: 1px solid #ff4141;
+            padding: 2px 10px;
             cursor: pointer;
+            font-size: 0.7em;
             font-family: inherit;
+        }
+
+        .btn-remove:hover { background: rgba(255, 65, 65, 0.1); }
+
+        /* Коригування полів підстави (вони теж у ряд) */
+        .ground-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
         }
 
         input[type="date"] {
             background: #000;
-            border: none;
-            border-bottom: 1px solid #333;
+            border: 1px solid #333;
             color: #00ff41;
-            padding: 8px;
+            padding: 10px;
             width: 100%;
+            font-family: inherit;
         }
     </style>
 </head>
@@ -91,40 +117,46 @@
     <div class="request-container">
         <header class="auth-header">
             <h2>FORM_DATA_ENTRY</h2>
-            <p class="status">Введення параметрів для генерації запиту</p>
+            <p class="status">Режим: Пакетна генерація запитів</p>
         </header>
 
         <div class="selected-resources-box">
-            <div style="font-size: 10px; margin-bottom: 10px; color: #888;">АКТИВНІ_МОДУЛІ:</div>
+            <div style="font-size: 10px; margin-bottom: 10px; color: #888;">АКТИВНІ_МОДУЛІ_БАЗ:</div>
             <div id="resourcesList"></div>
         </div>
 
         <form onsubmit="submitRequest(event)">
-            <div class="section-title">01. Анкетні_дані_об'єктів</div>
-            <button type="button" class="btn-add" onclick="addPerson()">[+] ДОДАТИ_ОБ'ЄКТ</button>
+            <div class="section-title">01. Об'єкти_перевірки</div>
+            
             <div id="personsContainer"></div>
+            
+            <button type="button" class="btn-add" onclick="addPerson()">[+] ДОДАТИ_НОВИЙ_ОБ'ЄКТ_В_СТЕК</button>
 
-            <div class="section-title">02. Юридична_підстава</div>
-            <div class="input-group">
-                <label>17-значний_код</label>
-                <input type="text" id="groundCode" maxlength="17" placeholder="00000000000000000" required>
-            </div>
-            <div class="input-group">
-                <label>Дата_підстави</label>
-                <input type="date" id="groundDate" required>
+            <div class="section-title">02. Правова_підстава</div>
+            <div class="ground-section">
+                <div class="input-group">
+                    <label>17-значний_код_підстави</label>
+                    <input type="text" id="groundCode" maxlength="17" placeholder="00000000000000000" required>
+                </div>
+                <div class="input-group">
+                    <label>Дата_реєстрації</label>
+                    <input type="date" id="groundDate" required>
+                </div>
             </div>
 
-            <button type="submit" class="btn-primary" style="margin-top: 30px;">ВИКОНАТИ_ЗАПИС_В_БАЗУ</button>
+            <button type="submit" class="btn-primary" style="margin-top: 40px; height: 50px;">ВИКОНАТИ_ПАКЕТНУ_ВІДПРАВКУ</button>
         </form>
 
-        <div style="margin-top: 20px; text-align: center;">
-            <a href="dashboard.html" style="color: #444; text-decoration: none; font-size: 12px;">[ ПОВЕРНУТИСЯ_БЕЗ_ЗБЕРЕЖЕННЯ ]</a>
+        <div style="margin-top: 25px; text-align: center;">
+            <a href="dashboard.html" style="color: #444; text-decoration: none; font-size: 11px;">[ ПЕРЕЗАВАНТАЖИТИ_ТЕРМІНАЛ ]</a>
         </div>
     </div>
 
     <script>
         let personCount = 0;
         const resourceNames = { 1: 'Аркан', 2: 'ДМС', 3: 'Реєстр нерухомості', 4: 'НАІС', 5: 'ІПНП', 6: 'YouControl', 7: 'РАЦС', 8: 'Судові рішення', 9: 'Довіреності' };
+        
+        // Поля для кожного ресурсу (ті самі)
         const resourceFields = {
             1: { fields: ['name', 'birthDate', 'passport'], labels: ['ПІБ', 'Дата народження', 'Закордонний паспорт'] },
             2: { fields: ['fullName', 'birthDate', 'rnkpo'], labels: ['ПІБ', 'Дата народження', 'РНКПО'] },
@@ -168,12 +200,24 @@
                 });
             });
 
-            let fieldsHTML = `<div class="person-header"><span>ОБ'ЄКТ #${personCount}</span>${personCount > 1 ? `<button type="button" class="btn-remove" onclick="removePerson(${personCount})">[ВИДАЛИТИ]</button>` : ''}</div>`;
+            // Заголовок об'єкта
+            let html = `
+                <div class="person-header">
+                    <span>OBJECT_IDENTIFIER: #${personCount}</span>
+                    ${personCount > 1 ? `<button type="button" class="btn-remove" onclick="removePerson(${personCount})">DROP_OBJECT</button>` : ''}
+                </div>
+                <div class="fields-grid">`; // Відкриваємо сітку
+
             fieldsSet.forEach(f => {
-                fieldsHTML += `<div class="input-group"><label>${labelsMap[f]}</label><input type="text" name="p${personCount}_${f}" required></div>`;
+                html += `
+                    <div class="input-group">
+                        <label>${labelsMap[f]}</label>
+                        <input type="text" name="p${personCount}_${f}" required>
+                    </div>`;
             });
 
-            div.innerHTML = fieldsHTML;
+            html += `</div>`; // Закриваємо сітку
+            div.innerHTML = html;
             container.appendChild(div);
         }
 
@@ -181,7 +225,7 @@
 
         function submitRequest(e) {
             e.preventDefault();
-            alert('СИСТЕМА: Запит сформовано та надіслано до черги обробки.');
+            alert('SYSTEM_SUCCESS: Всі запити додано до черги.');
             window.location.href = 'dashboard.html';
         }
 
