@@ -7,63 +7,17 @@
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* Додаткові стилі спеціально для сітки ресурсів */
+        /* Додаткові стилі для сітки 3x3 */
         .dashboard-container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-        }
-
-        .resources-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-
-        .resource-card {
-            background: #1a1a1a;
-            border: 1px solid #333;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .resource-card:hover {
-            border-color: #00ff41;
-            box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
-        }
-
-        .resource-card.selected {
-            border-color: #00ff41;
-            background: rgba(0, 255, 65, 0.05);
-        }
-
-        .resource-card.selected::before {
-            content: "[SELECTED]";
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 10px;
-            color: #00ff41;
-        }
-
-        .resource-title {
-            color: #00ff41;
-            font-size: 1.1em;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-
-        .resource-desc {
-            color: #888;
-            font-size: 0.85em;
+            font-family: 'JetBrains Mono', monospace; /* Щоб шрифт був всюди */
         }
 
         .dashboard-header {
-            border-bottom: 1px solid #333;
-            padding-bottom: 20px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 25px;
             margin-bottom: 30px;
             display: flex;
             justify-content: space-between;
@@ -76,40 +30,110 @@
             align-items: center;
             background: #111;
             padding: 15px;
+            border: 2px solid #333;
+            margin-bottom: 30px;
+        }
+
+        .resources-grid {
+            display: grid;
+            /* ЖОРСТКА СІТКА 3 НА 3 */
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px; /* Менший відступ, щоб виглядало щільніше */
+            margin-bottom: 40px;
+        }
+
+        .resource-card {
+            background: #1a1a1a;
             border: 1px solid #333;
-            margin-bottom: 20px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 150px; /* Мінімальна висота для карток */
+        }
+
+        .resource-card:hover {
+            border-color: #00ff41;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+            transform: scale(1.02); /* Легкий ефект масштабування */
+        }
+
+        .resource-card.selected {
+            border-color: #00ff41;
+            /* Брутальний зелений фон */
+            background: rgba(0, 255, 65, 0.08); 
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.4);
+        }
+
+        .resource-card.selected::before {
+            content: "[ACTIVE]";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 10px;
+            color: #00ff41;
+            font-weight: bold;
+        }
+
+        .resource-title {
+            color: #00ff41;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .resource-desc {
+            color: #888;
+            font-size: 0.8em;
+            line-height: 1.4;
+            flex-grow: 1; /* Опис заповнює простір */
         }
 
         .badge-count {
             color: #00ff41;
             background: rgba(0, 255, 65, 0.1);
-            padding: 2px 8px;
+            padding: 4px 10px;
             border: 1px solid #00ff41;
+            font-weight: bold;
         }
 
         .logout-link {
             color: #ff4141;
             text-decoration: none;
-            font-size: 0.9em;
+            font-size: 0.85em;
+            text-transform: uppercase;
         }
         
-        .logout-link:hover { text-decoration: underline; }
+        .logout-link:hover { text-decoration: underline; color: #ff0000; }
+
+        /* Фікс для кнопки в термінал стилі */
+        .submit-btn {
+            padding: 12px 24px;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div class="dashboard-container">
         <header class="dashboard-header">
             <div>
-                <h1 style="color: #00ff41;">MAIN_CONTROL_PANEL</h1>
-                <p class="status">User: <span id="userName" style="color: #fff;">Завантаження...</span></p>
+                <h1 style="color: #00ff41; font-size: 1.6em; text-transform: uppercase; letter-spacing: 2px;">Main_Control_Panel</h1>
+                <p class="status">Operator: <span id="userName" style="color: #fff;">...waiting_credentials</span></p>
             </div>
-            <a href="#" class="logout-link" onclick="logout()">[LOGOUT_SYSTEM]</a>
+            <a href="#" class="logout-link" onclick="logout()">[LOGOUT]</a>
         </header>
 
         <div class="controls-bar">
             <div>Вибрано_ресурсів: <span id="selectedCount" class="badge-count">0</span></div>
-            <button class="btn-primary" id="submitBtn" onclick="submitSelection()" disabled style="padding: 10px 20px;">
-                EXECUTE_REQUEST_FORM
+            <button class="btn-primary submit-btn" id="submitBtn" onclick="submitSelection()" disabled>
+                Execute_REQUEST_Form
             </button>
         </div>
 
@@ -119,9 +143,9 @@
 
     <script>
         const resources = [
-            { id: 1, title: 'База Аркан', desc: 'Витяг із зазначенням періоду перебування' },
-            { id: 2, title: 'ДМС України', desc: 'Державна міграційна служба' },
-            { id: 3, title: 'Реєстр нерухомості', desc: 'Державний реєстр речових прав' },
+            { id: 1, title: 'База_Аркан', desc: 'Витяг із зазначенням періоду перебування' },
+            { id: 2, title: 'ДМС_України', desc: 'Державна міграційна служба' },
+            { id: 3, title: 'Реєстр_нерухомості', desc: 'Державний реєстр речових прав' },
             { id: 4, title: 'НАІС ГСЦ МВС', desc: 'Головний сервісний центр МВС' },
             { id: 5, title: 'Витяг ІПНП', desc: 'Інформаційна підсистема' },
             { id: 6, title: 'YouControl', desc: 'Аналітична система перевірки' },
@@ -133,8 +157,7 @@
         let selectedResources = [];
 
         function loadResources() {
-            // Отримуємо дані користувача (якщо ти їх зберігав при реєстрації)
-            const user = JSON.parse(localStorage.getItem('currentUser')) || { name: "Operator_01" };
+            const user = JSON.parse(localStorage.getItem('currentUser')) || { name: "OP_01_KYIV" };
             document.getElementById('userName').textContent = user.name || user.login;
 
             const grid = document.getElementById('resourcesGrid');
