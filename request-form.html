@@ -7,48 +7,69 @@
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        body {
+            background-color: #050505;
+            color: #e0e0e0;
+            font-family: 'JetBrains Mono', monospace;
+            margin: 0;
+            padding: 20px;
+        }
+
         .request-container {
-            /* РОЗТЯГУЄМО КОНТЕЙНЕР */
             max-width: 1000px; 
             margin: 40px auto;
             background: #111;
             border: 1px solid #333;
-            padding: 30px;
+            padding: 40px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        .auth-header h2 {
+            color: #00ff41;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin: 0;
+        }
+
+        .status {
+            color: #666;
+            font-size: 0.8em;
+            margin-top: 5px;
         }
 
         .section-title {
             color: #00ff41;
             border-bottom: 1px solid #00ff41;
-            margin: 20px 0;
-            padding-bottom: 5px;
+            margin: 30px 0 20px 0;
+            padding-bottom: 8px;
             font-size: 0.9em;
             text-transform: uppercase;
             letter-spacing: 2px;
         }
 
-        /* Стилізація блоку з обраними модулями */
         .selected-resources-box {
-            background: rgba(0, 255, 65, 0.05);
-            border: 1px dashed #00ff41;
+            background: rgba(0, 255, 65, 0.03);
+            border: 1px dashed #444;
             padding: 15px;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
 
         .resource-tag {
             display: inline-block;
             background: #00ff41;
             color: #000;
-            padding: 2px 8px;
+            padding: 3px 10px;
             margin: 4px;
-            font-size: 10px;
+            font-size: 11px;
             font-weight: bold;
+            text-transform: uppercase;
         }
 
         .person-block {
-            border: 1px solid #333;
-            padding: 25px;
-            margin-bottom: 25px;
-            background: #0a0a0a;
+            border: 1px solid #222;
+            padding: 30px;
+            margin-bottom: 30px;
+            background: #0d0d0d;
             position: relative;
         }
 
@@ -56,122 +77,178 @@
             display: flex;
             justify-content: space-between;
             color: #00ff41;
-            margin-bottom: 20px;
-            font-size: 1em;
+            margin-bottom: 25px;
+            font-size: 1.1em;
             font-weight: bold;
             border-bottom: 1px solid #222;
             padding-bottom: 10px;
         }
 
-        /* СІТКА ДЛЯ ПОЛІВ ВСЕРЕДИНІ ОБ'ЄКТА */
+        /* СІТКА ДЛЯ ПОЛІВ ОБ'ЄКТА */
         .fields-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* Дві колонки */
-            gap: 20px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-size: 10px;
+            color: #888;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .input-group input {
+            background: #000;
+            border: 1px solid #333;
+            color: #00ff41;
+            padding: 12px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-group input:focus {
+            border-color: #00ff41;
         }
 
         .btn-add {
-            background: #1a1a1a;
+            background: transparent;
             border: 1px dashed #00ff41;
             color: #00ff41;
             padding: 15px;
             width: 100%;
             cursor: pointer;
-            margin-bottom: 30px;
-            font-family: 'JetBrains Mono', monospace;
-            transition: 0.3s;
+            margin-bottom: 40px;
+            font-family: inherit;
+            text-transform: uppercase;
+            font-weight: bold;
         }
 
-        .btn-add:hover { background: rgba(0, 255, 65, 0.1); }
+        .btn-add:hover {
+            background: rgba(0, 255, 65, 0.05);
+        }
 
         .btn-remove {
             color: #ff4141;
-            background: none;
+            background: transparent;
             border: 1px solid #ff4141;
-            padding: 2px 10px;
+            padding: 4px 12px;
             cursor: pointer;
-            font-size: 0.7em;
+            font-size: 10px;
             font-family: inherit;
+            text-transform: uppercase;
         }
 
-        .btn-remove:hover { background: rgba(255, 65, 65, 0.1); }
+        .btn-remove:hover {
+            background: rgba(255, 65, 65, 0.1);
+        }
 
-        /* Коригування полів підстави (вони теж у ряд) */
         .ground-section {
             display: grid;
             grid-template-columns: 2fr 1fr;
-            gap: 20px;
+            gap: 25px;
         }
 
-        input[type="date"] {
-            background: #000;
-            border: 1px solid #333;
-            color: #00ff41;
-            padding: 10px;
+        .btn-primary {
+            background: #00ff41;
+            color: #000;
+            border: none;
+            padding: 18px;
             width: 100%;
             font-family: inherit;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            letter-spacing: 2px;
+            margin-top: 40px;
+        }
+
+        .btn-primary:hover {
+            background: #00cc33;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
         }
     </style>
 </head>
 <body>
     <div class="request-container">
         <header class="auth-header">
-            <h2>FORM_DATA_ENTRY</h2>
-            <p class="status">Режим: Пакетна генерація запитів</p>
+            <h2>BATCH_REQUEST_SYSTEM</h2>
+            <p class="status">Введення даних об'єктів перевірки</p>
         </header>
 
         <div class="selected-resources-box">
-            <div style="font-size: 10px; margin-bottom: 10px; color: #888;">АКТИВНІ_МОДУЛІ_БАЗ:</div>
+            <div style="font-size: 10px; margin-bottom: 10px; color: #555;">ОБРАНІ_БАЗИ_ДЛЯ_ОПЕРАЦІЇ:</div>
             <div id="resourcesList"></div>
         </div>
 
-        <form onsubmit="submitRequest(event)">
-            <div class="section-title">01. Об'єкти_перевірки</div>
+        <form id="mainRequestForm" onsubmit="submitRequest(event)">
+            <div class="section-title">01. Стек_об'єктів</div>
             
             <div id="personsContainer"></div>
             
-            <button type="button" class="btn-add" onclick="addPerson()">[+] ДОДАТИ_НОВИЙ_ОБ'ЄКТ_В_СТЕК</button>
+            <button type="button" class="btn-add" onclick="addPerson()">[+] ДОДАТИ_ОБ'ЄКТ_ДО_ЗАПИТУ</button>
 
-            <div class="section-title">02. Правова_підстава</div>
+            <div class="section-title">02. Юридичні_реквізити</div>
             <div class="ground-section">
                 <div class="input-group">
                     <label>17-значний_код_підстави</label>
                     <input type="text" id="groundCode" maxlength="17" placeholder="00000000000000000" required>
                 </div>
                 <div class="input-group">
-                    <label>Дата_реєстрації</label>
+                    <label>Дата_підстави</label>
                     <input type="date" id="groundDate" required>
                 </div>
             </div>
 
-            <button type="submit" class="btn-primary" style="margin-top: 40px; height: 50px;">ВИКОНАТИ_ПАКЕТНУ_ВІДПРАВКУ</button>
+            <button type="submit" class="btn-primary">ІНІЦІЮВАТИ_ПРОЦЕС_ПЕРЕВІРКИ</button>
         </form>
 
-        <div style="margin-top: 25px; text-align: center;">
-            <a href="dashboard.html" style="color: #444; text-decoration: none; font-size: 11px;">[ ПЕРЕЗАВАНТАЖИТИ_ТЕРМІНАЛ ]</a>
+        <div style="margin-top: 30px; text-align: center;">
+            <a href="dashboard.html" style="color: #444; text-decoration: none; font-size: 10px;">[ СКАСУВАТИ_ТА_ПОВЕРНУТИСЯ ]</a>
         </div>
     </div>
 
     <script>
         let personCount = 0;
-        const resourceNames = { 1: 'Аркан', 2: 'ДМС', 3: 'Реєстр нерухомості', 4: 'НАІС', 5: 'ІПНП', 6: 'YouControl', 7: 'РАЦС', 8: 'Судові рішення', 9: 'Довіреності' };
+        const resourceNames = { 
+            1: 'Аркан', 
+            2: 'ДМС', 
+            3: 'Реєстр нерухомості', 
+            4: 'НАІС', 
+            5: 'ІПНП', 
+            6: 'YouControl', 
+            7: 'РАЦС', 
+            8: 'Судові рішення', 
+            9: 'Довіреності' 
+        };
         
-        // Поля для кожного ресурсу (ті самі)
         const resourceFields = {
             1: { fields: ['name', 'birthDate', 'passport'], labels: ['ПІБ', 'Дата народження', 'Закордонний паспорт'] },
-            2: { fields: ['fullName', 'birthDate', 'rnkpo'], labels: ['ПІБ', 'Дата народження', 'РНКПО'] },
-            3: { fields: ['fullName', 'ipn', 'address'], labels: ['ПІБ', 'ІПН', 'Адреса'] },
-            4: { fields: ['carNumber', 'rnkpo'], labels: ['Держномер авто', 'РНКПО'] },
+            2: { fields: ['fullName', 'birthDate', 'rnokpp'], labels: ['ПІБ', 'Дата народження', 'РНОКПП'] },
+            3: { fields: ['fullName', 'rnokpp', 'address'], labels: ['ПІБ', 'РНОКПП', 'Адреса'] },
+            4: { fields: ['carNumber', 'rnokpp'], labels: ['Держномер авто', 'РНОКПП'] },
             5: { fields: ['freeText'], labels: ['Додаткова інформація'] },
-            6: { fields: ['erdpo', 'toName'], labels: ['ЄРДПО', 'Назва ТОВ'] },
-            7: { fields: ['fullName', 'rnkpo'], labels: ['ПІБ', 'РНКПО'] },
+            6: { fields: ['edrpou', 'rnokpp', 'fullName', 'toName'], labels: ['ЄДРПОУ', 'РНОКПП', 'ПІБ', 'Назва ТОВ'] },
+            7: { fields: ['fullName', 'rnokpp'], labels: ['ПІБ', 'РНОКПП'] },
             8: { fields: ['fullName', 'birthDate'], labels: ['ПІБ', 'Дата народження'] },
-            9: { fields: ['rnkpo'], labels: ['РНКПО'] }
+            9: { fields: ['rnokpp'], labels: ['РНОКПП'] }
         };
 
         function init() {
             const selected = JSON.parse(sessionStorage.getItem('selectedResources')) || [];
-            if (selected.length === 0) { window.location.href = 'dashboard.html'; return; }
+            if (selected.length === 0) {
+                window.location.href = 'dashboard.html';
+                return;
+            }
 
             const list = document.getElementById('resourcesList');
             selected.forEach(id => {
@@ -193,20 +270,22 @@
             const selected = JSON.parse(sessionStorage.getItem('selectedResources')) || [];
             let fieldsSet = new Set();
             let labelsMap = {};
+
             selected.forEach(id => {
-                resourceFields[id].fields.forEach((f, i) => {
-                    fieldsSet.add(f);
-                    labelsMap[f] = resourceFields[id].labels[i];
-                });
+                if (resourceFields[id]) {
+                    resourceFields[id].fields.forEach((f, i) => {
+                        fieldsSet.add(f);
+                        labelsMap[f] = resourceFields[id].labels[i];
+                    });
+                }
             });
 
-            // Заголовок об'єкта
             let html = `
                 <div class="person-header">
-                    <span>OBJECT_IDENTIFIER: #${personCount}</span>
+                    <span>OBJ_ID: #${personCount}</span>
                     ${personCount > 1 ? `<button type="button" class="btn-remove" onclick="removePerson(${personCount})">DROP_OBJECT</button>` : ''}
                 </div>
-                <div class="fields-grid">`; // Відкриваємо сітку
+                <div class="fields-grid">`;
 
             fieldsSet.forEach(f => {
                 html += `
@@ -216,16 +295,21 @@
                     </div>`;
             });
 
-            html += `</div>`; // Закриваємо сітку
+            html += `</div>`;
             div.innerHTML = html;
             container.appendChild(div);
         }
 
-        function removePerson(id) { document.getElementById(`person-${id}`).remove(); }
+        function removePerson(id) {
+            const el = document.getElementById(`person-${id}`);
+            if (el) el.remove();
+        }
 
         function submitRequest(e) {
             e.preventDefault();
-            alert('SYSTEM_SUCCESS: Всі запити додано до черги.');
+            // Тут буде логіка відправки, поки просто симулюємо успіх
+            alert('SYSTEM: Запит сформовано. Пакет даних передано в чергу.');
+            sessionStorage.removeItem('selectedResources');
             window.location.href = 'dashboard.html';
         }
 
