@@ -1,38 +1,29 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AUTH_TERMINAL</title>
-   <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-</head>
-<body>
     <main class="auth-container">
-        <header class="auth-header">
-            <h2>System_Access</h2>
-            <p class="status">Status: Waiting for credentials...</p>
-        </header>
+    <header class="auth-header">
+        <h2>Доступ_до_системи</h2>
+        <p class="status">Статус: Очікування даних...</p>
+    </header>
 
-        <form class="auth-form">
-            <div class="input-group">
-                <label for="login">User_ID</label>
-                <input type="text" id="login" placeholder="Enter ID..." required>
-            </div>
-            
-            <div class="input-group">
-                <label for="password">Access_Key</label>
-                <input type="password" id="password" placeholder="••••••••" required>
-            </div>
+    <form class="auth-form">
+        <div class="input-group">
+            <label for="login">Ідентифікатор_користувача</label>
+            <input type="text" id="login" placeholder="Введіть ID..." required>
+        </div>
+        
+        <div class="input-group">
+            <label for="password">Ключ_доступу</label>
+            <input type="password" id="password" placeholder="••••••••" required>
+        </div>
 
-            <button type="submit" class="btn-primary">Execute_Login</button>
-        </form>
+        <button type="submit" class="btn-primary">Увійти_в_систему</button>
+    </form>
 
-        <footer class="auth-footer">
-            <a href="#">Forgot_Key?</a>
-            <span class="divider">|</span>
-            <a href="#">Request_Access</a>
-        </footer>
-    </main>
-</body>
-</html>
+    <footer class="auth-footer">
+        <a href="#">Забули_ключ?</a>
+        <span class="divider">|</span>
+        <a href="#">Запросити_доступ</a>
+    </footer>
+</main>
