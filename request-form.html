@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Форма запиту - Система запитів</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        .selected-resources {
+            background: #f0f8f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 25px;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .resources-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .resource-tag {
+            background: #4caf50;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .form-section:last-of-type {
+            border-bottom: none;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .person-block {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .person-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .remove-person-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .remove-person-btn:hover {
+            background: #ff5252;
+        }
+        
+        .add-person-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        
+        .add-person-btn:hover {
+            background: #764ba2;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background 0.3s;
+            margin-top: 20px;
+        }
+        
+        .submit-btn:hover {
+            background: #45a049;
+        }
+        
+        .back-btn {
+            background: #999;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .back-btn:hover {
+            background: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="back-btn" onclick="goBack()">← Назад</button>
+        
+        <h1>📝 Форма запиту</h1>
+        
+        <div class="selected-resources">
+            <div style="font-weight: 600; margin-bottom: 8px; color: #333;">Вибрані ресурси:</div>
+            <div class="resources-list" id="resourcesList"></div>
+        </div>
+        
+        <form onsubmit="submitRequest(event)">
+            <!-- Анкетні дані -->
+            <div class="form-section">
+                <div class="section-title">📋 Анкетні дані</div>
+                <button type="button" class="add-person-btn" onclick="addPerson()">➕ Додати особу</button>
+                <div id="personsContainer"></div>
+            </div>
+            
+            <!-- Підстава запиту -->
+            <div class="form-section">
+                <div class="section-title">⚖️ Підстава запиту</div>
+                
+                <div class="form-group">
+                    <label>17-значний код підстави:</label>
+                    <input type="text" id="groundCode" maxlength="17" placeholder="Введи 17-значний код" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Дата від:</label>
+                    <input type="date" id="groundDate" required>
+                </div>
+            </div>
+            
+            <button type="submit" class="submit-btn">✅ Подати запит</button>
+        </form>
+    </div>
+    
+    <script>
+        let selectedResourceIds = [];
+        let personCount = 0;
+        
+        const resourceNames = {
+            1: 'витяг з бази Аркан',
+            2: 'витяг з Державної міграційної служби',
+            3: 'витяг з Державного реєстру речових прав',
+            4: 'витяг з ГСЦ МВС НАІС',
+            5: 'Витяг з ІПНП',
+            6: 'витяг з You Control',
+            7: 'витяг з держреєстру актів цивільного стану',
+            8: 'витяг з Єдиного реєстру судових рішень',
+            9: 'витяг з Єдиного реєстру довіреностей'
+        };
+        
+        const resourceFields = {
+            1: { fields: ['name', 'birthDate', 'passport'], labels: ['Прізвище Імя', 'Дата народження', 'Закордонний паспорт'] },
+            2: { fields: ['fullName', 'birthDate', 'rnkpo'], labels: ['ПІБ', 'Дата народження', 'РНКПО'] },
+            3: { fields: ['fullName', 'ipn', 'address'], labels: ['ПІБ', 'ІПН', 'Адреса'] },
+            4: { fields: ['carNumber', 'rnkpo', 'fullName', 'birthDate'], labels: ['Номерний знак авто', 'РНКПО', 'ПІБ', 'Дата народження'] },
+            5: { fields: ['freeText'], labels: ['Додаткова інформація'] },
+            6: { fields: ['erdpo', 'rnkpo', 'fullName', 'toName'], labels: ['ЄРДПО', 'РНКПО', 'ПІБ', 'Назва ТОВ'] },
+            7: { fields: ['fullName', 'rnkpo'], labels: ['ПІБ', 'РНКПО'] },
+            8: { fields: ['fullName', 'birthDate'], labels: ['ПІБ', 'Дата народження'] },
+            9: { fields: ['rnkpo'], labels: ['РНКПО'] }
+        };
+        
+        function init() {
+            selectedResourceIds = JSON.parse(sessionStorage.getItem('selectedResources')) || [];
+            
+            if (selectedResourceIds.length === 0) {
+                window.location.href = 'resources.html';
+                return;
+            }
+            
+            // Показуємо вибрані ресурси
+            const resourcesList = document.getElementById('resourcesList');
+            selectedResourceIds.forEach(id => {
+                const tag = document.createElement('span');
+                tag.className = 'resource-tag';
+                tag.textContent = `${id}. ${resourceNames[id]}`;
+                resourcesList.appendChild(tag);
+            });
+            
+            addPerson();
+        }
+        
+        function addPerson() {
+            personCount++;
+            const container = document.getElementById('personsContainer');
+            
+            const personDiv = document.createElement('div');
+            personDiv.className = 'person-block';
+            personDiv.id = `person-${personCount}`;
+            
+            let fieldsHTML = `
+                <div class="person-title">
+                    Особа ${personCount}
+                    ${personCount > 1 ? `<button type="button" class="remove-person-btn" onclick="removePerson(${personCount})">❌ Видалити</button>` : ''}
+                </div>
+            `;
+            
+            // Збираємо унікальні поля з УСІХ вибраних ресурсів
+            let allFields = new Set();
+            let allLabels = {};
+            
+            selectedResourceIds.forEach(resourceId => {
+                const config = resourceFields[resourceId];
+                config.fields.forEach((field, index) => {
+                    allFields.add(field);
+                    allLabels[field] = config.labels[index];
+                });
+            });
+            
+            // Додаємо поля
+            allFields.forEach(field => {
+                const label = allLabels[field];
+                fieldsHTML += `
+                    <div class="form-group">
+                        <label>${label}:</label>
+                        <input type="text" name="person${personCount}_${field}" placeholder="Введи ${label.toLowerCase()}">
+                    </div>
+                `;
+            });
+            
+            personDiv.innerHTML = fieldsHTML;
+            container.appendChild(personDiv);
+        }
+        
+        function removePerson(personNum) {
+            const personDiv = document.getElementById(`person-${personNum}`);
+            if (personDiv) {
+                personDiv.remove();
+            }
+        }
+        
+        function submitRequest(event) {
+            event.preventDefault();
+            
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            const groundCode = document.getElementById('groundCode').value;
+            const groundDate = document.getElementById('groundDate').value;
+            
+            // Збираємо дані осіб
+            const persons = [];
+            document.querySelectorAll('.person-block').forEach((block, index) => {
+                const personData = {};
+                block.querySelectorAll('input').forEach(input => {
+                    if (input.value) {
+                        personData[input.name] = input.value;
+                    }
+                });
+                if (Object.keys(personData).length > 0) {
+                    persons.push(personData);
+                }
+            });
+            
+            if (persons.length === 0) {
+                alert('❌ Заповни дані хоча б однієї особи!');
+                return;
+            }
+            
+            // Створюємо окремий запит для КОЖНОГО ресурсу
+            let requests = JSON.parse(localStorage.getItem('requests')) || [];
+            
+            selectedResourceIds.forEach(resourceId => {
+                const request = {
+                    id: Date.now() + Math.random(),
+                    userId: user.id,
+                    resourceId: resourceId,
+                    resourceName: resourceNames[resourceId],
+                    persons: persons,
+                    groundCode: groundCode,
+                    groundDate: groundDate,
+                    status: 'На розгляді',
+                    createdAt: new Date().toLocaleString('uk-UA'),
+                    updatedAt: new Date().toLocaleString('uk-UA')
+                };
+                
+                requests.push(request);
+            });
+            
+            localStorage.setItem('requests', JSON.stringify(requests));
+            
+            alert(`✅ ${selectedResourceIds.length} запит(ів) успішно подано!`);
+            sessionStorage.removeItem('selectedResources');
+            window.location.href = 'resources.html';
+        }
+        
+        function goBack() {
+            sessionStorage.removeItem('selectedResources');
+            window.location.href = 'resources.html';
+        }
+        
+        window.onload = init;
+    </script>
+</body>
+</html>
